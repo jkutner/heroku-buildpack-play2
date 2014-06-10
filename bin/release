@@ -20,6 +20,6 @@ EOF
 if [ ! -f $BUILD_DIR/Procfile ]; then
 cat <<EOF
 default_process_types:
-  web: ./activator run -Dhttp.port=\$PORT
+  web: ./activator start -Dhttp.port=\$PORT
 EOF
 fi

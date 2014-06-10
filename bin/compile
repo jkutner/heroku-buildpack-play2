@@ -39,7 +39,12 @@ install_java ${BUILD_DIR} ${javaVersion}
 jdk_overlay ${BUILD_DIR}
 echo "done"
 
+# COMPILE
 
+cd $BUILD_DIR
+
+echo -n "-----> Compiling Application..."
+./activator compile
 
 # POST COMPILE
 
