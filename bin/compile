@@ -61,7 +61,7 @@ ACTIVATOR_TASKS="stage"
 # mkdir -p "$SBT_USER_HOME/.sbt/plugins"
 # cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 
-JAVA_OPTS="-Xmx10M -XX:MaxPermSize=512M -XX:+CMSClassUnloadingEnabled"
+JAVA_OPTS="-Xms768M -Xmx1024M -XX:MaxPermSize=512M -XX:+CMSClassUnloadingEnabled"
 JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF8 -Dsbt.log.noformat=true"
 JAVA_OPTS="$JAVA_OPTS -Duser.home=$SBT_USER_HOME_ABSOLUTE"
 JAVA_OPTS="$JAVA_OPTS -Divy.default.ivy.user.dir=$SBT_USER_HOME_ABSOLUTE/.ivy2"
