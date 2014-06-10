@@ -75,13 +75,13 @@ clean_play_slug() {
   # drop useless directories from slug for play only
   if is_play ${buildDir} ; then
     if [ -d ${sbtUserHome}/.ivy2 ]; then
-    echo "-----> Dropping ivy cache from the slug"
-        rm -rf ${sbtUserHome}/.ivy2
-      fi
+      echo "-----> Dropping ivy cache from the slug"
+      rm -rf ${sbtUserHome}/.ivy2
+    fi
     if [ -d ${buildDir}/project/boot ] ; then
-    echo "-----> Dropping project boot dir from the slug"
-        rm -rf ${buildDir}/project/boot
-      fi
+      echo "-----> Dropping project boot dir from the slug"
+      rm -rf ${buildDir}/project/boot
+    fi
     if [ -d ${buildDir}/target ] ; then
       echo "-----> Dropping compilation artifacts from the slug"
       rm -rf ${buildDir}/target/scala-*
