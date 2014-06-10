@@ -35,7 +35,6 @@ count_files() {
   fi
 }
 
-
 _universal_packaging_procs() {
   local ctxDir=$1
   (cd $ctxDir; find target/universal/stage/bin -type f -executable)
@@ -66,5 +65,28 @@ cache_copy() {
   if [ -d $from_dir/$rel_dir ]; then
     mkdir -p $to_dir/$rel_dir
     cp -pr $from_dir/$rel_dir/. $to_dir/$rel_dir
+  fi
+}
+
+clean_play_slug() {
+  local buildDir=$1
+  local sbtUserHome=$2
+
+  # drop useless directories from slug for play only
+  if is_play ${buildDir} ; then
+    if [ -d ${sbtUserHome}/.ivy2 ]; then
+    echo "-----> Dropping ivy cache from the slug"
+        rm -rf ${sbtUserHome}/.ivy2
+      fi
+    if [ -d ${buildDir}/project/boot ] ; then
+    echo "-----> Dropping project boot dir from the slug"
+        rm -rf ${buildDir}/project/boot
+      fi
+    if [ -d ${buildDir}/target ] ; then
+      echo "-----> Dropping compilation artifacts from the slug"
+      rm -rf ${buildDir}/target/scala-*
+      rm -rf ${buildDir}/target/streams
+      rm -rf ${buildDir}/target/resolution-cache
+    fi
   fi
 }
