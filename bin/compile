@@ -68,7 +68,7 @@ JAVA_OPTS="$JAVA_OPTS -Divy.default.ivy.user.dir=$SBT_USER_HOME_ABSOLUTE/.ivy2"
 JAVA_OPTS="$JAVA_OPTS -Dsbt.global.base=$SBT_USER_HOME_ABSOLUTE"
 
 echo -n "-----> Running: activator $ACTIVATOR_TASKS" && echo ""
-HOME="$SBT_USER_HOME_ABSOLUTE" ./activator $ACTIVATOR_TASKS 2>&1 | sed -u 's/^/       /'
+HOME="$SBT_USER_HOME_ABSOLUTE" JAVA_OPTS="$JAVA_OPTS" ./activator $ACTIVATOR_TASKS 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
 echo " ! Failed to build app with sbt"
   exit 1
