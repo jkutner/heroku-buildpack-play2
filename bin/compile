@@ -29,7 +29,7 @@ mkdir -p $CACHE_DIR
 
 # create default system.properties
 if [ ! -f ${BUILD_DIR}/system.properties ]; then
-echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
+  echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
 fi
 
 # install JDK
@@ -40,48 +40,48 @@ jdk_overlay ${BUILD_DIR}
 echo "done"
 
 cd $BUILD_DIR
-
-# unpack cache
-CACHED_DIRS="$SBT_USER_HOME/.ivy2 $SBT_BINDIR target project/target project/boot"
-for DIR in $CACHED_DIRS; do
-  cache_copy $DIR $CACHE_DIR $BUILD_DIR
-done
-
-if [ ! -d .ivy2/cache ]; then
-  mkdir -p .ivy2/cache
-fi
+#
+# # unpack cache
+# CACHED_DIRS="$SBT_USER_HOME/.ivy2 $SBT_BINDIR target project/target project/boot"
+# for DIR in $CACHED_DIRS; do
+#   cache_copy $DIR $CACHE_DIR $BUILD_DIR
+# done
+#
+# if [ ! -d .ivy2/cache ]; then
+#   mkdir -p .ivy2/cache
+# fi
 
 echo -n "-----> Compiling Application... "
-./activator compile
+./activator clean stage
 
-
-PROFILE_PATH="$BUILD_DIR/.profile.d/scala.sh"
-mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
-
-# repack cache
-mkdir -p $CACHE_DIR
-for DIR in $CACHED_DIRS; do
-cache_copy $DIR $BUILD_DIR $CACHE_DIR
-done
-
-# drop useless directories from slug for play only
-if is_play $BUILD_DIR ; then
-if [ -d $SBT_USER_HOME/.ivy2 ]; then
-echo "-----> Dropping ivy cache from the slug"
-    rm -rf $SBT_USER_HOME/.ivy2
-  fi
-if [ -d $BUILD_DIR/project/boot ] ; then
-echo "-----> Dropping project boot dir from the slug"
-    rm -rf $BUILD_DIR/project/boot
-  fi
-if [ -d $BUILD_DIR/target ] ; then
-echo "-----> Dropping compilation artifacts from the slug"
-    rm -rf $BUILD_DIR/target/scala-*
-    rm -rf $BUILD_DIR/target/streams
-    rm -rf $BUILD_DIR/target/resolution-cache
-  fi
-fi
+#
+# PROFILE_PATH="$BUILD_DIR/.profile.d/scala.sh"
+# mkdir -p $(dirname $PROFILE_PATH)
+# echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
+#
+# # repack cache
+# mkdir -p $CACHE_DIR
+# for DIR in $CACHED_DIRS; do
+# cache_copy $DIR $BUILD_DIR $CACHE_DIR
+# done
+#
+# # drop useless directories from slug for play only
+# if is_play $BUILD_DIR ; then
+# if [ -d $SBT_USER_HOME/.ivy2 ]; then
+# echo "-----> Dropping ivy cache from the slug"
+#     rm -rf $SBT_USER_HOME/.ivy2
+#   fi
+# if [ -d $BUILD_DIR/project/boot ] ; then
+# echo "-----> Dropping project boot dir from the slug"
+#     rm -rf $BUILD_DIR/project/boot
+#   fi
+# if [ -d $BUILD_DIR/target ] ; then
+# echo "-----> Dropping compilation artifacts from the slug"
+#     rm -rf $BUILD_DIR/target/scala-*
+#     rm -rf $BUILD_DIR/target/streams
+#     rm -rf $BUILD_DIR/target/resolution-cache
+#   fi
+# fi
 
 # Move compiled app back to where Heroku expects it
 mv $BUILD_DIR $APP_BUILD_DIR
