@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+# fail fast
+set -e
+
+BP_DIR=$(cd $(dirname $0)/..; pwd) # absolute path
+BIN_DIR=$BP_DIR/bin
+OPT_DIR=$BP_DIR/opt
+. $BIN_DIR/common
+
+# parse args
+APP_BUILD_DIR=$(cd $1; pwd)
+CACHE_DIR=$2
+ENV_DIR=$3
+
+# Move app to a static build dir to keep paths the same between builds
+BUILD_DIR="/tmp/scala_buildpack_build_dir"
+mv $APP_BUILD_DIR $BUILD_DIR
+
+curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
+. bin/util
+. bin/java
+
+export_env_dir $ENV_DIR
+
+#create the cache dir if it doesn't exist
+mkdir -p $CACHE_DIR
+
+# create default system.properties
+if [ ! -f ${BUILD_DIR}/system.properties ]; then
+echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
+fi
+
+# install JDK
+javaVersion=$(detect_java_version ${BUILD_DIR})
+echo -n "-----> Installing OpenJDK ${javaVersion}..."
+install_java ${BUILD_DIR} ${javaVersion}
+jdk_overlay ${BUILD_DIR}
+echo "done"
+
+
+
+# POST COMPILE
+
+# drop useless directories from slug for play only
+if is_play $BUILD_DIR ; then
+if [ -d $SBT_USER_HOME/.ivy2 ]; then
+echo "-----> Dropping ivy cache from the slug"
+    rm -rf $SBT_USER_HOME/.ivy2
+  fi
+if [ -d $BUILD_DIR/project/boot ] ; then
+echo "-----> Dropping project boot dir from the slug"
+    rm -rf $BUILD_DIR/project/boot
+  fi
+if [ -d $BUILD_DIR/target ] ; then
+echo "-----> Dropping compilation artifacts from the slug"
+    rm -rf $BUILD_DIR/target/scala-*
+    rm -rf $BUILD_DIR/target/streams
+    rm -rf $BUILD_DIR/target/resolution-cache
+  fi
+fi
+
+# Move compiled app back to where Heroku expects it
+mv $BUILD_DIR $APP_BUILD_DIR
