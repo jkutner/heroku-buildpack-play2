@@ -17,5 +17,9 @@ addons:
 
 EOF
 
-echo "default_process_types:"
-echo "  activator run -Dhttp.port=\$PORT"
+if [ ! -f $BUILD_DIR/Procfile ]; then
+cat <<EOF
+default_process_types:
+  web: activator run -Dhttp.port=\$PORT
+EOF
+fi
