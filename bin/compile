@@ -48,6 +48,12 @@ SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
 
 cd $BUILD_DIR
 
+# unpack cache
+CACHED_DIRS="$SBT_USER_HOME/.ivy2 target project/target project/boot"
+for DIR in $CACHED_DIRS; do
+  cache_copy $DIR $CACHE_DIR $BUILD_DIR
+done
+
 ACTIVATOR_TASKS="stage"
 
 # To enable clean compiles, configure the environment to clean:
@@ -73,6 +79,12 @@ if [ "${PIPESTATUS[*]}" != "0 0" ]; then
 echo " ! Failed to build app with sbt"
   exit 1
 fi
+
+# repack cache
+mkdir -p $CACHE_DIR
+for DIR in $CACHED_DIRS; do
+  cache_copy $DIR $BUILD_DIR $CACHE_DIR
+done
 
 clean_play_slug $BUILD_DIR $SBT_USER_HOME
 
