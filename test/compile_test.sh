@@ -26,6 +26,8 @@ testCompile() {
 
   capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
   assertEquals "" "`cat ${STD_OUT}`"
+
+  # compile
   # assertCapturedSuccess
 
   # setup
