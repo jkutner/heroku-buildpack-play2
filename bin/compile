@@ -17,78 +17,78 @@ ENV_DIR=$3
 # Move app to a static build dir to keep paths the same between builds
 BUILD_DIR="/tmp/play2_buildpack_build_dir"
 mv $APP_BUILD_DIR $BUILD_DIR
-
-curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
-. bin/util
-. bin/java
-
-export_env_dir $ENV_DIR
-
-#create the cache dir if it doesn't exist
-mkdir -p $CACHE_DIR
-
-# create default system.properties
-if [ ! -f ${BUILD_DIR}/system.properties ]; then
-  echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
-fi
-
-# install JDK
-javaVersion=$(detect_java_version ${BUILD_DIR})
-echo -n "-----> Installing OpenJDK ${javaVersion}..."
-install_java ${BUILD_DIR} ${javaVersion}
-jdk_overlay ${BUILD_DIR}
-echo "done"
-
-# home directory from perspective of SBT; we rename
-# it because otherwise the project root and $HOME
-# are the same, and by default .sbt has a (different)
-# meaning in those two places
-SBT_USER_HOME=".sbt_home"
-SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
-
-cd $BUILD_DIR
-
-# unpack cache
-CACHED_DIRS="$SBT_USER_HOME target project/target project/boot"
-for DIR in $CACHED_DIRS; do
-  cache_copy $DIR $CACHE_DIR $BUILD_DIR
-done
-
-ACTIVATOR_TASKS="stage"
-
-# To enable clean compiles, configure the environment to clean:
-# $ heroku config:set ACTIVATOR_CLEAN=true
-# $ git push heroku master
-# See: https://devcenter.heroku.com/articles/scala-support#clean-builds
-[ "$ACTIVATOR_CLEAN" = "true" ] && ACTIVATOR_TASKS="clean $ACTIVATOR_TASKS"
-
-# copy in heroku sbt plugin
-# HEROKU_PLUGIN="HerokuPlugin.scala"
-# mkdir -p "$SBT_USER_HOME/.sbt/plugins"
-# cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
-
-JAVA_OPTS="-Xms768M -Xmx1024M -XX:MaxPermSize=512M -XX:+CMSClassUnloadingEnabled"
-JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF8 -Dsbt.log.noformat=true"
-JAVA_OPTS="$JAVA_OPTS -Duser.home=$SBT_USER_HOME_ABSOLUTE"
-JAVA_OPTS="$JAVA_OPTS -Divy.default.ivy.user.dir=$SBT_USER_HOME_ABSOLUTE/.ivy2"
-JAVA_OPTS="$JAVA_OPTS -Dsbt.global.base=$SBT_USER_HOME_ABSOLUTE"
-
-echo -n "-----> Running: activator $ACTIVATOR_TASKS" && echo ""
-HOME="$SBT_USER_HOME_ABSOLUTE" JAVA_OPTS="$JAVA_OPTS" ./activator $ACTIVATOR_TASKS 2>&1 | sed -u 's/^/       /'
-if [ "${PIPESTATUS[*]}" != "0 0" ]; then
-echo " ! Failed to build app with sbt"
-  exit 1
-fi
-
-# repack cache
-mkdir -p $CACHE_DIR
-for DIR in $CACHED_DIRS; do
-  cache_copy $DIR $BUILD_DIR $CACHE_DIR
-done
-
-clean_play_slug $BUILD_DIR $SBT_USER_HOME
-
-# Move compiled app back to where Heroku expects it
+#
+# curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
+# . bin/util
+# . bin/java
+#
+# export_env_dir $ENV_DIR
+#
+# #create the cache dir if it doesn't exist
+# mkdir -p $CACHE_DIR
+#
+# # create default system.properties
+# if [ ! -f ${BUILD_DIR}/system.properties ]; then
+#   echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
+# fi
+#
+# # install JDK
+# javaVersion=$(detect_java_version ${BUILD_DIR})
+# echo -n "-----> Installing OpenJDK ${javaVersion}..."
+# install_java ${BUILD_DIR} ${javaVersion}
+# jdk_overlay ${BUILD_DIR}
+# echo "done"
+#
+# # home directory from perspective of SBT; we rename
+# # it because otherwise the project root and $HOME
+# # are the same, and by default .sbt has a (different)
+# # meaning in those two places
+# SBT_USER_HOME=".sbt_home"
+# SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
+#
+# cd $BUILD_DIR
+#
+# # unpack cache
+# CACHED_DIRS="$SBT_USER_HOME target project/target project/boot"
+# for DIR in $CACHED_DIRS; do
+#   cache_copy $DIR $CACHE_DIR $BUILD_DIR
+# done
+#
+# ACTIVATOR_TASKS="stage"
+#
+# # To enable clean compiles, configure the environment to clean:
+# # $ heroku config:set ACTIVATOR_CLEAN=true
+# # $ git push heroku master
+# # See: https://devcenter.heroku.com/articles/scala-support#clean-builds
+# [ "$ACTIVATOR_CLEAN" = "true" ] && ACTIVATOR_TASKS="clean $ACTIVATOR_TASKS"
+#
+# # copy in heroku sbt plugin
+# # HEROKU_PLUGIN="HerokuPlugin.scala"
+# # mkdir -p "$SBT_USER_HOME/.sbt/plugins"
+# # cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
+#
+# JAVA_OPTS="-Xms768M -Xmx1024M -XX:MaxPermSize=512M -XX:+CMSClassUnloadingEnabled"
+# JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF8 -Dsbt.log.noformat=true"
+# JAVA_OPTS="$JAVA_OPTS -Duser.home=$SBT_USER_HOME_ABSOLUTE"
+# JAVA_OPTS="$JAVA_OPTS -Divy.default.ivy.user.dir=$SBT_USER_HOME_ABSOLUTE/.ivy2"
+# JAVA_OPTS="$JAVA_OPTS -Dsbt.global.base=$SBT_USER_HOME_ABSOLUTE"
+#
+# echo -n "-----> Running: activator $ACTIVATOR_TASKS" && echo ""
+# HOME="$SBT_USER_HOME_ABSOLUTE" JAVA_OPTS="$JAVA_OPTS" ./activator $ACTIVATOR_TASKS 2>&1 | sed -u 's/^/       /'
+# if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+# echo " ! Failed to build app with sbt"
+#   exit 1
+# fi
+#
+# # repack cache
+# mkdir -p $CACHE_DIR
+# for DIR in $CACHED_DIRS; do
+#   cache_copy $DIR $BUILD_DIR $CACHE_DIR
+# done
+#
+# clean_play_slug $BUILD_DIR $SBT_USER_HOME
+#
+# # Move compiled app back to where Heroku expects it
 mv $BUILD_DIR $APP_BUILD_DIR
 
 BUILD_DIR=$APP_BUILD_DIR
