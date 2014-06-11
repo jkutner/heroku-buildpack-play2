@@ -92,7 +92,7 @@ for DIR in $CACHED_DIRS; do
   cache_copy $DIR $BUILD_DIR $CACHE_DIR
 done
 
-clean_play_slug $BUILD_DIR $SBT_USER_HOME
+# clean_play_slug $BUILD_DIR $SBT_USER_HOME
 
 # Move compiled app back to where Heroku expects it
 mv $BUILD_DIR $APP_BUILD_DIR
