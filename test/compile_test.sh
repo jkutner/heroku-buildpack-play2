@@ -6,8 +6,7 @@ DEFAULT_SBT_VERSION="0.13.5"
 DEFAULT_SBT_JAR="sbt-launch-0.11.3-2.jar"
 SBT_TEST_CACHE="/tmp/sbt-test-cache"
 
-beforeSetUp() {
-}
+
 
 afterSetUp() {
   # Remove play-specific build dir in case it's already there
