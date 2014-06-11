@@ -17,25 +17,25 @@ _createPlayApp() {
   cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
 }
 
-testCompile() {
-  _createPlayApp
-
-  # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
-  mkdir -p ${CACHE_DIR}/.sbt_home
-
-  compile
-
-  assertCapturedSuccess
-  assertCaptured "Activator tasks to run should be output" "Running: activator stage"
-  assertNotCaptured "Activator task failed" "! Failed to build app with activator"
-
-  # re-deploy
-  compile
-
-  assertCapturedSuccess
-  assertNotCaptured "Activator should not re-download Scala" "Getting Scala"
-  assertNotCaptured "Activator should not re-download any dependencies" "[info] downloading"
-  assertNotCaptured "Activator should not resolve any dependencies" "[info] Resolving"
-  assertCaptured "Activator tasks to run should still be outputed" "Running: activator stage"
-  assertNotCaptured "Activator task failed" "! Failed to build app with activator"
-}
+# testCompile() {
+#   _createPlayApp
+#
+#   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
+#   mkdir -p ${CACHE_DIR}/.sbt_home
+#
+#   compile
+#
+#   assertCapturedSuccess
+#   assertCaptured "Activator tasks to run should be output" "Running: activator stage"
+#   assertNotCaptured "Activator task failed" "! Failed to build app with activator"
+#
+#   # re-deploy
+#   compile
+#
+#   assertCapturedSuccess
+#   assertNotCaptured "Activator should not re-download Scala" "Getting Scala"
+#   assertNotCaptured "Activator should not re-download any dependencies" "[info] downloading"
+#   assertNotCaptured "Activator should not resolve any dependencies" "[info] Resolving"
+#   assertCaptured "Activator tasks to run should still be outputed" "Running: activator stage"
+#   assertNotCaptured "Activator task failed" "! Failed to build app with activator"
+# }

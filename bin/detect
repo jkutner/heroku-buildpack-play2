@@ -14,8 +14,5 @@ if is_play $BUILD_DIR ; then
   else
     echo "$PLAY_2_X"
   fi
-else
-  echo "Scala"
 fi
 exit 0
-
