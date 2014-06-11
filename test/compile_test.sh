@@ -6,7 +6,10 @@ DEFAULT_SBT_VERSION="0.13.5"
 DEFAULT_SBT_JAR="sbt-launch-0.11.3-2.jar"
 SBT_TEST_CACHE="/tmp/sbt-test-cache"
 
-
+beforeSetUp() {
+  mkdir -p build cache
+  cp -r ${BUILDPACK_HOME}/test-app/* build
+}
 
 afterSetUp() {
   # Remove play-specific build dir in case it's already there
@@ -20,8 +23,6 @@ compilePlay() {
 }
 
 testCompile() {
-  mkdir -p build cache
-  cp -r $BUILD_DIR/test-app/* build
 
   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
   mkdir -p build/.sbt_home
