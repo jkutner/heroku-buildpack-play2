@@ -16,7 +16,7 @@ ENV_DIR=$3
 
 # Move app to a static build dir to keep paths the same between builds
 BUILD_DIR="/tmp/play2_buildpack_build_dir"
-mv $APP_BUILD_DIR $BUILD_DIR
+cpr -r $APP_BUILD_DIR/* $BUILD_DIR
 # BUILD_DIR=$APP_BUILD_DIR
 
 curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
