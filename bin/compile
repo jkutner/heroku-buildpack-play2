@@ -70,20 +70,20 @@ JAVA_OPTS="$JAVA_OPTS -Dsbt.global.base=$SBT_USER_HOME_ABSOLUTE"
 
 echo -n "-----> Running: activator $ACTIVATOR_TASKS" && echo ""
 HOME="$SBT_USER_HOME_ABSOLUTE" JAVA_OPTS="$JAVA_OPTS" ./activator $ACTIVATOR_TASKS 2>&1 | sed -u 's/^/       /'
-# if [ "${PIPESTATUS[*]}" != "0 0" ]; then
-# echo " ! Failed to build app with sbt"
-#   exit 1
-# fi
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+echo " ! Failed to build app with sbt"
+  exit 1
+fi
 
-# # repack cache
-# mkdir -p $CACHE_DIR
-# for DIR in $CACHED_DIRS; do
-#   cache_copy $DIR $BUILD_DIR $CACHE_DIR
-# done
-#
-# clean_play_slug $BUILD_DIR $SBT_USER_HOME
-#
-# # Move compiled app back to where Heroku expects it
+# repack cache
+mkdir -p $CACHE_DIR
+for DIR in $CACHED_DIRS; do
+  cache_copy $DIR $BUILD_DIR $CACHE_DIR
+done
+
+clean_play_slug $BUILD_DIR $SBT_USER_HOME
+
+# Move compiled app back to where Heroku expects it
 mv $BUILD_DIR $APP_BUILD_DIR
 
 BUILD_DIR=$APP_BUILD_DIR

@@ -21,14 +21,11 @@ testCompile() {
   _createPlayApp
 
   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
-  mkdir -p ${BUILD_DIR}/.sbt_home
   mkdir -p ${CACHE_DIR}/.sbt_home
 
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-  assertEquals "" "`cat ${STD_OUT}`"
+  compile
 
-  # compile
-  # assertCapturedSuccess
+  assertCapturedSuccess
 
   # setup
   # assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
