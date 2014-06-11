@@ -28,7 +28,7 @@ testCompile() {
   assertCapturedSuccess
 
   # setup
-  assertTrue "Ivy2 cache should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home/.ivy2 ]"
+  assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
 
   # run
   assertCaptured "Activator tasks to run should be output" "Running: activator stage"
