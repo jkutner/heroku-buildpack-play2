@@ -17,7 +17,7 @@ addons:
   heroku-postgresql:dev
 
 default_process_types:
-  web: target/universal/stage/bin/starter-project -Dhttp.port=\\$PORT
+  web: target/universal/stage/bin/start-project -Dhttp.port=\\$PORT
 EOF`
 
   release
