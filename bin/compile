@@ -47,21 +47,21 @@ SBT_USER_HOME=".sbt_home"
 SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
 
 cd $BUILD_DIR
-#
-# # unpack cache
-# CACHED_DIRS="$SBT_USER_HOME target project/target project/boot"
-# for DIR in $CACHED_DIRS; do
-#   cache_copy $DIR $CACHE_DIR $BUILD_DIR
-# done
-#
-# ACTIVATOR_TASKS="stage"
-#
-# # To enable clean compiles, configure the environment to clean:
-# # $ heroku config:set ACTIVATOR_CLEAN=true
-# # $ git push heroku master
-# # See: https://devcenter.heroku.com/articles/scala-support#clean-builds
-# [ "$ACTIVATOR_CLEAN" = "true" ] && ACTIVATOR_TASKS="clean $ACTIVATOR_TASKS"
-#
+
+# unpack cache
+CACHED_DIRS="$SBT_USER_HOME target project/target project/boot"
+for DIR in $CACHED_DIRS; do
+  cache_copy $DIR $CACHE_DIR $BUILD_DIR
+done
+
+ACTIVATOR_TASKS="stage"
+
+# To enable clean compiles, configure the environment to clean:
+# $ heroku config:set ACTIVATOR_CLEAN=true
+# $ git push heroku master
+# See: https://devcenter.heroku.com/articles/scala-support#clean-builds
+[ "$ACTIVATOR_CLEAN" = "true" ] && ACTIVATOR_TASKS="clean $ACTIVATOR_TASKS"
+
 # # copy in heroku sbt plugin
 # # HEROKU_PLUGIN="HerokuPlugin.scala"
 # # mkdir -p "$SBT_USER_HOME/.sbt/plugins"
