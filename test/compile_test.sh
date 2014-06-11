@@ -25,7 +25,7 @@ testCompile() {
 
   compile
 
-  # assertCapturedSuccess
+  assertCapturedSuccess
 
   # setup
   # assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
