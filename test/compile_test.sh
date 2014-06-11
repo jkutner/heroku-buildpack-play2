@@ -8,7 +8,7 @@ SBT_TEST_CACHE="/tmp/sbt-test-cache"
 
 beforeSetUp() {
   mkdir -p build cache
-  cp -r test-app/* build
+  cp -r ${BUILD_DIR}/test-app/* build
 }
 
 afterSetUp() {
@@ -19,7 +19,7 @@ afterSetUp() {
 }
 
 compilePlay() {
-  compile `pwd`/build `pwd`/cache 2>&1
+  compile build cache 2>&1
 }
 
 testCompile() {
