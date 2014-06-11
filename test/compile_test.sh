@@ -13,7 +13,7 @@ afterSetUp() {
   unset ACTIVATOR_CLEAN
 }
 
-_primeSbtTestCache()
+_primePlayTestCache()
 {
   local sbtVersion=${1:-${DEFAULT_SBT_VERSION}}
 
@@ -30,7 +30,9 @@ _primeSbtTestCache()
     CACHE_DIR=${SBT_TEST_CACHE}/${sbtVersion}/app/cache
     mkdir -p ${BUILD_DIR} ${CACHE_DIR}
 
-    _createSbtProject ${sbtVersion} ${BUILD_DIR}
+
+    cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
+
     ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR} >/dev/null 2>&1
     echo "$?" > ${compileStatusFile}
 
@@ -54,7 +56,6 @@ _createPlayApp() {
   local sbtVersion=${1:-${DEFAULT_SBT_VERSION}}
 
   _primeIvyCache ${sbtVersion}
-  cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
 }
 
 testCompile() {
