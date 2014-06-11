@@ -46,7 +46,6 @@ echo "done"
 SBT_USER_HOME=".sbt_home"
 SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
 
-mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 # unpack cache
