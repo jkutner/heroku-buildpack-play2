@@ -23,21 +23,21 @@ curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack
 . bin/java
 
 export_env_dir $ENV_DIR
-#
-# #create the cache dir if it doesn't exist
-# mkdir -p $CACHE_DIR
-#
-# # create default system.properties
-# if [ ! -f ${BUILD_DIR}/system.properties ]; then
-#   echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
-# fi
-#
-# # install JDK
-# javaVersion=$(detect_java_version ${BUILD_DIR})
-# echo -n "-----> Installing OpenJDK ${javaVersion}..."
-# install_java ${BUILD_DIR} ${javaVersion}
-# jdk_overlay ${BUILD_DIR}
-# echo "done"
+
+#create the cache dir if it doesn't exist
+mkdir -p $CACHE_DIR
+
+# create default system.properties
+if [ ! -f ${BUILD_DIR}/system.properties ]; then
+  echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
+fi
+
+# install JDK
+javaVersion=$(detect_java_version ${BUILD_DIR})
+echo -n "-----> Installing OpenJDK ${javaVersion}..."
+install_java ${BUILD_DIR} ${javaVersion}
+jdk_overlay ${BUILD_DIR}
+echo "done"
 #
 # # home directory from perspective of SBT; we rename
 # # it because otherwise the project root and $HOME
