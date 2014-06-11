@@ -25,7 +25,7 @@ compilePlay() {
 testCompile() {
 
   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
-  mkdir -p ${CACHE_DIR}/.sbt_home
+  mkdir -p cache/.sbt_home
 
   compilePlay
 
@@ -38,7 +38,7 @@ testCompile() {
   assertCaptured "Activator tasks to run should be output" "Running: activator stage"
 
   # clean up
-  assertEquals "SBT cache should have been repacked" "" "$(diff -r build/.sbt_home ${CACHE_DIR}/.sbt_home)"
+  assertEquals "SBT cache should have been repacked" "" "$(diff -r build/.sbt_home cache/.sbt_home)"
 
   # re-deploy
   compilePlay
