@@ -14,5 +14,7 @@ if is_play $BUILD_DIR ; then
   else
     echo "$PLAY_2_X"
   fi
+  exit 0
+else
+  echo "no" && exit 1
 fi
-exit 0
