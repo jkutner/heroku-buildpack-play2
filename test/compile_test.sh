@@ -19,7 +19,7 @@ afterSetUp() {
 }
 
 compilePlay() {
-  sh bin/compile build cache 2>&1
+  compile build cache 2>&1
 }
 
 testCompile() {
