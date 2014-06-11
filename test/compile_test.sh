@@ -6,10 +6,6 @@ DEFAULT_SBT_VERSION="0.13.5"
 DEFAULT_SBT_JAR="sbt-launch-0.11.3-2.jar"
 SBT_TEST_CACHE="/tmp/sbt-test-cache"
 
-# beforeSetUp() {
-#   cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
-# }
-
 afterSetUp() {
   # Remove play-specific build dir in case it's already there
   rm -rf /tmp/play2_buildpack_build_dir
@@ -17,8 +13,52 @@ afterSetUp() {
   unset ACTIVATOR_CLEAN
 }
 
-testCompile() {
+_primeSbtTestCache()
+{
+  local sbtVersion=${1:-${DEFAULT_SBT_VERSION}}
+
+  # exit code of app compile is cached so it is consistant between runn
+  local compileStatusFile=${SBT_TEST_CACHE}/${sbtVersion}/app/compile_status
+
+  if [ ! -f ${compileStatusFile} ]; then
+    [ -d ${SBT_TEST_CACHE}/${sbtVersion} ] && rm -r ${SBT_TEST_CACHE}/${sbtVersion}
+
+    ORIGINAL_BUILD_DIR=${BUILD_DIR}
+    ORIGINAL_CACHE_DIR=${CACHE_DIR}
+
+    BUILD_DIR=${SBT_TEST_CACHE}/${sbtVersion}/app/build
+    CACHE_DIR=${SBT_TEST_CACHE}/${sbtVersion}/app/cache
+    mkdir -p ${BUILD_DIR} ${CACHE_DIR}
+
+    _createSbtProject ${sbtVersion} ${BUILD_DIR}
+    ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR} >/dev/null 2>&1
+    echo "$?" > ${compileStatusFile}
+
+    BUILD_DIR=${ORIGINAL_BUILD_DIR}
+    CACHE_DIR=${ORIGINAL_CACHE_DIR}
+  fi
+
+  return $(cat ${compileStatusFile})
+}
+
+_primeIvyCache()
+{
+  local sbtVersion=${1:-${DEFAULT_SBT_VERSION}}
+
+  ivy2_path=.sbt_home/.ivy2
+  mkdir -p ${CACHE_DIR}/${ivy2_path}
+  _primeSbtTestCache ${sbtVersion} && cp -r ${SBT_TEST_CACHE}/${sbtVersion}/app/cache/${ivy2_path}/cache ${CACHE_DIR}/${ivy2_path}
+}
+
+_createPlayApp() {
+  local sbtVersion=${1:-${DEFAULT_SBT_VERSION}}
+
+  _primeIvyCache ${sbtVersion}
   cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
+}
+
+testCompile() {
+  _createPlayApp
 
   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
   # mkdir -p ${BUILD_DIR}/.sbt_home
