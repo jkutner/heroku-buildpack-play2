@@ -24,10 +24,7 @@ testCompile() {
   mkdir -p ${BUILD_DIR}/.sbt_home
   mkdir -p ${CACHE_DIR}/.sbt_home
 
-  # compile
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-
-  assertEquals "" "`cat ${STD_ERR}`"
+  compile
 
   assertCapturedSuccess
 
