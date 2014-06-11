@@ -26,15 +26,8 @@ testCompile() {
   compile
 
   assertCapturedSuccess
-
-  # setup
-  # assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
-
-  # run
   assertCaptured "Activator tasks to run should be output" "Running: activator stage"
-
-  # clean up
-  # assertEquals "SBT cache should have been repacked" "" "$(diff -r ${BUILD_DIR}/.sbt_home ${CACHE_DIR}/.sbt_home)"
+  assertNotCaptured "Activator task failed" "! Failed to build app with activator"
 
   # re-deploy
   compile
@@ -44,4 +37,5 @@ testCompile() {
   assertNotCaptured "Activator should not re-download any dependencies" "[info] downloading"
   assertNotCaptured "Activator should not resolve any dependencies" "[info] Resolving"
   assertCaptured "Activator tasks to run should still be outputed" "Running: activator stage"
+  assertNotCaptured "Activator task failed" "! Failed to build app with activator"
 }
