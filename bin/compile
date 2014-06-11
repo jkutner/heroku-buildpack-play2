@@ -49,7 +49,7 @@ SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
 cd $BUILD_DIR
 
 # unpack cache
-CACHED_DIRS="$SBT_USER_HOME/.ivy2 $SBT_USER_HOME/boot $SBT_USER_HOME/staging target project/target project/boot"
+CACHED_DIRS="$SBT_USER_HOME target project/target project/boot"
 for DIR in $CACHED_DIRS; do
   cache_copy $DIR $CACHE_DIR $BUILD_DIR
 done
