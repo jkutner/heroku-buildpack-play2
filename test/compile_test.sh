@@ -28,13 +28,13 @@ testCompile() {
   assertCapturedSuccess
 
   # setup
-  assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
+  # assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
 
   # run
   assertCaptured "Activator tasks to run should be output" "Running: activator stage"
 
   # clean up
-  assertEquals "SBT cache should have been repacked" "" "$(diff -r ${BUILD_DIR}/.sbt_home ${CACHE_DIR}/.sbt_home)"
+  # assertEquals "SBT cache should have been repacked" "" "$(diff -r ${BUILD_DIR}/.sbt_home ${CACHE_DIR}/.sbt_home)"
 
   # re-deploy
   compile
