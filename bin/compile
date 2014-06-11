@@ -38,15 +38,15 @@ echo -n "-----> Installing OpenJDK ${javaVersion}..."
 install_java ${BUILD_DIR} ${javaVersion}
 jdk_overlay ${BUILD_DIR}
 echo "done"
-#
-# # home directory from perspective of SBT; we rename
-# # it because otherwise the project root and $HOME
-# # are the same, and by default .sbt has a (different)
-# # meaning in those two places
-# SBT_USER_HOME=".sbt_home"
-# SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
-#
-# cd $BUILD_DIR
+
+# home directory from perspective of SBT; we rename
+# it because otherwise the project root and $HOME
+# are the same, and by default .sbt has a (different)
+# meaning in those two places
+SBT_USER_HOME=".sbt_home"
+SBT_USER_HOME_ABSOLUTE="$BUILD_DIR/$SBT_USER_HOME"
+
+cd $BUILD_DIR
 #
 # # unpack cache
 # CACHED_DIRS="$SBT_USER_HOME target project/target project/boot"
