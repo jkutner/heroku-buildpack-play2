@@ -7,8 +7,7 @@ DEFAULT_SBT_JAR="sbt-launch-0.11.3-2.jar"
 SBT_TEST_CACHE="/tmp/sbt-test-cache"
 
 beforeSetUp() {
-  mkdir -p build cache
-  cp -r ${BUILDPACK_HOME}/test-app/* build
+  cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
 }
 
 afterSetUp() {
@@ -18,31 +17,27 @@ afterSetUp() {
   unset ACTIVATOR_CLEAN
 }
 
-compilePlay() {
-  compile `pwd`/build cache 2>&1
-}
-
 testCompile() {
 
   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
-  mkdir -p build/.sbt_home
-  mkdir -p cache/.sbt_home
+  mkdir -p ${BUILD_DIR}/.sbt_home
+  mkdir -p ${CACHE_DIR}/.sbt_home
 
-  compilePlay
+  compile
 
   assertCapturedSuccess
 
   # setup
-  assertTrue "Activator repo should have been repacked." "[ -d build/.sbt_home ]"
+  assertTrue "Activator repo should have been repacked." "[ -d ${BUILD_DIR}/.sbt_home ]"
 
   # run
   assertCaptured "Activator tasks to run should be output" "Running: activator stage"
 
   # clean up
-  assertEquals "SBT cache should have been repacked" "" "$(diff -r build/.sbt_home cache/.sbt_home)"
+  assertEquals "SBT cache should have been repacked" "" "$(diff -r ${BUILD_DIR}/.sbt_home ${CACHE_DIR}/.sbt_home)"
 
   # re-deploy
-  compilePlay
+  compile
 
   assertCapturedSuccess
   assertNotCaptured "Activator should not re-download Scala" "Getting Scala"
