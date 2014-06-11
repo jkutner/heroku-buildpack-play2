@@ -12,7 +12,7 @@ beforeSetUp() {
 
 afterSetUp() {
   # Remove play-specific build dir in case it's already there
-  rm -rf /tmp/play_buildpack_build_dir
+  rm -rf /tmp/play2_buildpack_build_dir
   # Clear clean compiles...most apps don't need to clean by default
   unset ACTIVATOR_CLEAN
 }
@@ -20,7 +20,7 @@ afterSetUp() {
 testCompile() {
 
   # create `testfile`s in CACHE_DIR and later assert `compile` copied them to BUILD_DIR
-  mkdir -p ${BUILD_DIR}/.sbt_home
+  # mkdir -p ${BUILD_DIR}/.sbt_home
   mkdir -p ${CACHE_DIR}/.sbt_home
 
   compile
