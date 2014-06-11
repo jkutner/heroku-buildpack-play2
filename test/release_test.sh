@@ -2,14 +2,12 @@
 
 . ${BUILDPACK_TEST_RUNNER_HOME}/lib/test_utils.sh
 
-_createPlayApp() {
-  cp -r ${BUILDPACK_HOME}/test-app/* ${BUILD_DIR}
-}
-
 testRelease()
 {
-  _createPlayApp
-  
+  mkdir -p ${BUILD_DIR}/target/universal/stage/bin
+  touch ${BUILD_DIR}/target/universal/stage/bin/start-project
+  chmod +x ${BUILD_DIR}/target/universal/stage/bin/start-project
+
   expected_release_output=`cat <<EOF
 ---
 config_vars:
@@ -19,7 +17,7 @@ addons:
   heroku-postgresql:dev
 
 default_process_types:
-  web: target/universal/stage/bin/starter-project
+  web: target/universal/stage/bin/starter-project -Dhttp.port=\$PORT
 EOF`
 
   release
