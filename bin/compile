@@ -54,13 +54,7 @@ for DIR in $CACHED_DIRS; do
   cache_copy $DIR $CACHE_DIR $BUILD_DIR
 done
 
-ACTIVATOR_TASKS="compile"
-
-# To enable stage task, configure the environment to clean:
-# $ heroku config:set ACTIVATOR_STAGE=true
-# $ git push heroku master
-# See: https://devcenter.heroku.com/articles/scala-support#clean-builds
-[ "$ACTIVATOR_STAGE" = "true" ] && ACTIVATOR_TASKS="$ACTIVATOR_TASKS stage"
+ACTIVATOR_TASKS="stage"
 
 # To enable clean compiles, configure the environment to clean:
 # $ heroku config:set ACTIVATOR_CLEAN=true
@@ -92,7 +86,7 @@ for DIR in $CACHED_DIRS; do
   cache_copy $DIR $BUILD_DIR $CACHE_DIR
 done
 
-# clean_play_slug $BUILD_DIR $SBT_USER_HOME
+clean_play_slug $BUILD_DIR $SBT_USER_HOME
 
 # Move compiled app back to where Heroku expects it
 mv $BUILD_DIR $APP_BUILD_DIR
