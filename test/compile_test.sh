@@ -49,7 +49,7 @@ _primeIvyCache()
 
   ivy2_path=.sbt_home/.ivy2
   mkdir -p ${CACHE_DIR}/${ivy2_path}
-  _primeSbtTestCache ${sbtVersion} && cp -r ${SBT_TEST_CACHE}/${sbtVersion}/app/cache/${ivy2_path}/cache ${CACHE_DIR}/${ivy2_path}
+  _primePlayTestCache ${sbtVersion} && cp -r ${SBT_TEST_CACHE}/${sbtVersion}/app/cache/${ivy2_path}/cache ${CACHE_DIR}/${ivy2_path}
 }
 
 _createPlayApp() {
