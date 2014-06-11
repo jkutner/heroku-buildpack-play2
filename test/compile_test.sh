@@ -19,7 +19,7 @@ afterSetUp() {
 }
 
 compilePlay() {
-  compile build cache 2>&1
+  compile `pwd`/build cache 2>&1
 }
 
 testCompile() {
