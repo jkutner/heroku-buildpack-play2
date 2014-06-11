@@ -23,7 +23,7 @@ testCompile() {
   # mkdir -p ${BUILD_DIR}/.sbt_home
   mkdir -p ${CACHE_DIR}/.sbt_home
 
-  compile
+  compile ${BUILD_DIR}
 
   assertCapturedSuccess
 
@@ -37,7 +37,7 @@ testCompile() {
   # assertEquals "SBT cache should have been repacked" "" "$(diff -r ${BUILD_DIR}/.sbt_home ${CACHE_DIR}/.sbt_home)"
 
   # re-deploy
-  compile
+  compile ${BUILD_DIR}
 
   assertCapturedSuccess
   assertNotCaptured "Activator should not re-download Scala" "Getting Scala"
