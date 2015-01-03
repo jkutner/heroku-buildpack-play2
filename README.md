@@ -1,9 +1,9 @@
-Heroku buildpack: Play!
-=========================
+Heroku buildpack: Play >= 2.3
+=============================
 
-This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for [Play! framework](http://www.playframework.org/) apps.
+This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for [Play framework](http://www.playframework.org/) apps.
 
-*Note: This buildpack only applies to Play 2.3.x apps. Earlier Play 2.x.x apps are handled by the [Scala buildpack](https://github.com/heroku/heroku-buildpack-scala)*
+*Note: This buildpack only applies to Play 2.3.x apps and newer. Earlier Play 2.x.x apps are handled by the [Scala buildpack](https://github.com/heroku/heroku-buildpack-scala)*
 
 Usage
 -----
